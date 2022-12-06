@@ -1,7 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsPositive, IsString } from "class-validator";
 
 export class CreateConselhoDto {
+    @IsPositive()
+    id: number;
+
     @ApiProperty()
     @IsString()
     @IsNotEmpty()

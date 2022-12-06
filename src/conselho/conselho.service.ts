@@ -22,11 +22,15 @@ export class ConselhoService {
     async getConselhoApi(){
     const conselho = this.conselhoRepository
         axios.get('https://api.adviceslip.com/advice').then(function (response) {
+            const id = response.data.slip.id
+            console.log(id)
+            if(!conselho.find(id)){
+                return 'Id already existis'
+            }
             conselho.save({
                 id: response.data.slip.id,
                 texto: response.data.slip.advice
-            })
-            
+            })   
             console.log(response);
           })
           .catch(function (error) {
