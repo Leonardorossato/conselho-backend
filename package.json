@@ -33,6 +33,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/passport-jwt": "^3.0.7",
     "@types/passport-local": "^1.0.34",
+    "axios": "^1.2.1",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.3",

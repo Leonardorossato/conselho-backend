@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import axios from 'axios';
 import { Repository } from 'typeorm';
 import { CreateConselhoDto } from './dto/create.conselho.dto';
 import { Conselho } from './entities/conselho.entity';
@@ -17,12 +18,20 @@ export class ConselhoService {
         }
     }
 
-    async create(dto: CreateConselhoDto){
-        try {
-            const conselho = await this.conselhoRepository.save(dto)
-            return conselho
-        } catch (error) {
-            throw new HttpException('Erro to create conselho', HttpStatus.BAD_REQUEST)
-        }
+    
+    async getConselhoApi(){
+    const conselho = this.conselhoRepository
+        axios.get('https://api.adviceslip.com/advice').then(function (response) {
+            conselho.save({
+                id: response.data.slip.id,
+                texto: response.data.slip.advice
+            })
+            
+            console.log(response);
+          })
+          .catch(function (error) {
+            // manipula erros da requisição
+            console.error(error);
+          })
     }
 }
