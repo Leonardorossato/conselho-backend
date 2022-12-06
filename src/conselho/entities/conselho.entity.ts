@@ -5,7 +5,7 @@ export class Conselho{
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({nullable: false, unique: true})
     texto: string
 
     @Column()
