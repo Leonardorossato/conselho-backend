@@ -53,7 +53,6 @@ export class ConselhoService {
             .orderBy('RANDOM()')
             .limit(1)
             .execute();
-            console.log(array)
         return array[0];
     }
 }
