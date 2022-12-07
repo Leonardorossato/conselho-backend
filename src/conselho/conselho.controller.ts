@@ -17,4 +17,8 @@ export class ConselhoController {
   async getConselhoApi(){
     return await this.conselhoService.getConselhoApi()
   }
+  @Get('/get-conselo-aleatorio')
+  async getConselhoAleatorio(){
+    return await this.conselhoService.getConselhoAleatorio()
+  }
 }

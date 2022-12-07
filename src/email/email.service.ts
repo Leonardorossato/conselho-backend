@@ -6,8 +6,8 @@ import { Email } from './entities/email.entity';
 
 @Injectable()
 export class EmailService {
-    constructor(@InjectRepository(Email) private emailRepository: Repository<Email>) {}
-    async all(): Promise<Email[]>{
+    constructor(@InjectRepository(Email) private emailRepository: Repository<Email>) { }
+    async all(): Promise<Email[]> {
 
         try {
 
@@ -18,14 +18,35 @@ export class EmailService {
         } catch (error) {
 
             throw new HttpException('Email not found', HttpStatus.NOT_FOUND)
-
         }
 
     }
+    async create(dto: CreateEmailDto) {
 
-    async create(dto: CreateEmailDto){
+        // try {
+        //     var nodemailer = require('nodemailer');
+        //     var transporter = nodemailer.createTransport({
+        //         service: 'gmail',
+        //         auth: {
+        //             user: 'youremail@gmail.com',
+        //             pass: 'yourpassword'
+        //         }
+        //     });
 
-        try {
+        //     var mailOptions = {
+        //         from: 'youremail@gmail.com',
+        //         to: 'myfriend@yahoo.com',
+        //         subject: 'Sending Email using Node.js',
+        //         text: 'That was easy!'
+        //     };
+
+        //     transporter.sendMail(mailOptions, function () {
+        //         if (error) {
+        //             console.log(error);
+        //         } else {
+        //             console.log('Email sent: ' + info.response);
+        //         }
+        //     });
 
             const email = await this.emailRepository.save(dto)
 
@@ -38,4 +59,4 @@ export class EmailService {
         }
 
     }
-}
+// }

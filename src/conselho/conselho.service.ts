@@ -7,9 +7,9 @@ import { Conselho } from './entities/conselho.entity';
 
 @Injectable()
 export class ConselhoService {
-    constructor(@InjectRepository(Conselho) private readonly conselhoRepository: Repository<Conselho>){}
+    constructor(@InjectRepository(Conselho) private readonly conselhoRepository: Repository<Conselho>) { }
 
-    async all(): Promise<Conselho[]>{
+    async all(): Promise<Conselho[]> {
         try {
             const conselho = await this.conselhoRepository.find()
             return conselho
@@ -18,31 +18,45 @@ export class ConselhoService {
         }
     }
 
-    
-    async getConselhoApi(){
-    const conselho = await this.conselhoRepository
-    const quantidadeExistente = await conselho.count()
-    if(quantidadeExistente === 50) throw new Error(`Quantity maximum: ${quantidadeExistente}`)
-    
+    async getConselhoApi() {
+        const conselho = await this.conselhoRepository
+        const quantidadeExistente = await conselho.count()
+        if (quantidadeExistente === 50) throw new Error(`Quantity maximum: ${quantidadeExistente}`)
+
         for (let index = quantidadeExistente; index < 50; index++) {
             await axios.get('https://api.adviceslip.com/advice').then(async function (response) {
-                let conselhoExistente = await conselho.findOneBy({id: response.data.slip.id})
-                if(conselhoExistente){
+                let conselhoExistente = await conselho.findOneBy({ id: response.data.slip.id })
+                if (conselhoExistente) {
                     index--
                     return 'Id already existis'
                 }
                 await conselho.save({
                     id: response.data.slip.id,
                     texto: response.data.slip.advice
-                })   
-              })
-              .catch(function (error) {
-                // manipula erros da requisição
-                console.error(error.response.status);
-              })
+                })
+            })
+                .catch(function (error) {
+                    // manipula erros da requisição
+                    console.error(error.response.status);
+                })
             setTimeout(() => {
 
             }, 3000)
         }
     }
+
+    async getConselhoAleatorio() {
+        const conselho = await this.conselhoRepository
+        const array = await conselho.createQueryBuilder()
+            .select('*')
+            .from(Conselho, 'conselho')
+            .orderBy('RANDOM()')
+            .limit(1)
+            .execute();
+            console.log(array)
+        return array[0];
+    }
 }
+
+
+
