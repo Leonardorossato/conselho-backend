@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Repository } from 'typeorm';
 import { CreateConselhoDto } from './dto/create.conselho.dto';
 import { Conselho } from './entities/conselho.entity';
-
+import { translate } from '@vitalets/google-translate-api';
 @Injectable()
 export class ConselhoService {
     constructor(@InjectRepository(Conselho) private readonly conselhoRepository: Repository<Conselho>) { }
@@ -36,12 +36,9 @@ export class ConselhoService {
                 })
             })
                 .catch(function (error) {
-                    // manipula erros da requisição
                     console.error(error.response.status);
                 })
-            setTimeout(() => {
-
-            }, 3000)
+            setTimeout(() => { }, 3000)
         }
     }
 
@@ -55,6 +52,20 @@ export class ConselhoService {
             .execute();
         return array[0];
     }
+
+	async translateConselho(){
+		try {
+			const texto = await this.conselhoRepository.find({where: {traducao: null}})
+			texto.forEach(async element => {
+				let textoTraduzido= await translate(element.texto, {from:'en', to: 'pt' })
+				await this.conselhoRepository.save({id: element.id, traducao: textoTraduzido.text})
+				setTimeout(() => {}, 3000)
+			});
+			return `Quantity de textos traduzidos ${texto.length}`
+		} catch (error) {
+			throw new Error(error)
+		}
+	}
 }
 
 

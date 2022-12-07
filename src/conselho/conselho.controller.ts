@@ -21,4 +21,8 @@ export class ConselhoController {
   async getConselhoAleatorio(){
     return await this.conselhoService.getConselhoAleatorio()
   }
+  @Get('/translate-conselho')
+  async translateConselho(){
+    return await this.conselhoService.translateConselho()
+  }
 }
