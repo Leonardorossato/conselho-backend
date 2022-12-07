@@ -20,22 +20,29 @@ export class ConselhoService {
 
     
     async getConselhoApi(){
-    const conselho = this.conselhoRepository
-        axios.get('https://api.adviceslip.com/advice').then(function (response) {
-            const id = response.data.slip.id
-            console.log(id)
-            if(!conselho.find(id)){
-                return 'Id already existis'
-            }
-            conselho.save({
-                id: response.data.slip.id,
-                texto: response.data.slip.advice
-            })   
-            console.log(response);
-          })
-          .catch(function (error) {
-            // manipula erros da requisição
-            console.error(error);
-          })
+    const conselho = await this.conselhoRepository
+    const quantidadeExistente = await conselho.count()
+    if(quantidadeExistente === 50) throw new Error(`Quantity maximum: ${quantidadeExistente}`)
+    
+        for (let index = quantidadeExistente; index < 50; index++) {
+            await axios.get('https://api.adviceslip.com/advice').then(async function (response) {
+                let conselhoExistente = await conselho.findOneBy({id: response.data.slip.id})
+                if(conselhoExistente){
+                    index--
+                    return 'Id already existis'
+                }
+                await conselho.save({
+                    id: response.data.slip.id,
+                    texto: response.data.slip.advice
+                })   
+              })
+              .catch(function (error) {
+                // manipula erros da requisição
+                console.error(error.response.status);
+              })
+            setTimeout(() => {
+
+            }, 3000)
+        }
     }
 }
