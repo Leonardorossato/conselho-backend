@@ -13,8 +13,8 @@ export class ConselhoController {
     return await this.conselhoService.all()
   }
 
-  @Post('/create')
-  async createConselho(@Body() dto: CreateConselhoDto){
-    return await this.conselhoService.create(dto)
+  @Get('/get-conselho')
+  async getConselhoApi(){
+    return await this.conselhoService.getConselhoApi()
   }
 }

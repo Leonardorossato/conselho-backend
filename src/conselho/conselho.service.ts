@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import axios from 'axios';
 import { Repository } from 'typeorm';
 import { CreateConselhoDto } from './dto/create.conselho.dto';
 import { Conselho } from './entities/conselho.entity';
@@ -17,12 +18,31 @@ export class ConselhoService {
         }
     }
 
-    async create(dto: CreateConselhoDto){
-        try {
-            const conselho = await this.conselhoRepository.save(dto)
-            return conselho
-        } catch (error) {
-            throw new HttpException('Erro to create conselho', HttpStatus.BAD_REQUEST)
+    
+    async getConselhoApi(){
+    const conselho = await this.conselhoRepository
+    const quantidadeExistente = await conselho.count()
+    if(quantidadeExistente === 50) throw new Error(`Quantity maximum: ${quantidadeExistente}`)
+    
+        for (let index = quantidadeExistente; index < 50; index++) {
+            await axios.get('https://api.adviceslip.com/advice').then(async function (response) {
+                let conselhoExistente = await conselho.findOneBy({id: response.data.slip.id})
+                if(conselhoExistente){
+                    index--
+                    return 'Id already existis'
+                }
+                await conselho.save({
+                    id: response.data.slip.id,
+                    texto: response.data.slip.advice
+                })   
+              })
+              .catch(function (error) {
+                // manipula erros da requisição
+                console.error(error.response.status);
+              })
+            setTimeout(() => {
+
+            }, 3000)
         }
     }
 }
