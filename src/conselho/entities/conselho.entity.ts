@@ -6,8 +6,8 @@ export class Conselho{
     id: number
 
     @Column({nullable: false, unique: true})
-    text: string
+    texto: string
 
     @Column()
-    Translation: string
+    traducao: string
 }
