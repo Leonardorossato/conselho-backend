@@ -8,7 +8,7 @@ export class CreateEmailDto {
     @IsNotEmpty()
     nome: string
 
-    @ApiProperty({example: 'meu@email.com'})
+    @ApiProperty({example: 'meu@gmail.com'})
     @IsEmail()
     @IsString()
     email: string;

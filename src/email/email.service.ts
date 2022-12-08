@@ -23,10 +23,12 @@ export class EmailService {
     async create(dto: CreateEmailDto){
         try{
             const user = await this.emailRepository.findOneBy({email: dto.email})
-            if(!user){
+            if(user){
                 throw new HttpException('Email already existis', HttpStatus.BAD_REQUEST)
             }
-            return await this.emailRepository.save(user)
+            const email = await this.emailRepository.create(dto)
+            await this.emailRepository.save(email)
+            return email
         }catch (error) {
             throw new HttpException('Erro to create email', HttpStatus.BAD_REQUEST)
         }
