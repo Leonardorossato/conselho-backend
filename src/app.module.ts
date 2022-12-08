@@ -20,16 +20,17 @@ import { MailerModule } from '@nestjs-modules/mailer';
       transport: {
         host: config.get('MAIL_HOST'),
         secure: false,
+        port: config.get('MAIL_PORT'),
         auth: {
-          email: config.get('MAIL_EMAIL'),
-          name: config.get('MAIL_NOME'),
+          user: config.get('MAIL_USER'),
+          pass: config.get('MAIL_PASS'),
         },
       },
       defaults: {
         from: `"No Reply" <${config.get('MAIL_FROM')}>`,
       },
       template: {
-        dir: join(__dirname, './email/templates'),
+        dir: join(__dirname + '/templates'),
         adapter: new HandlebarsAdapter(),
         options: {
           strict: true,
