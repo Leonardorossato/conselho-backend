@@ -4,11 +4,15 @@ import { EmailService } from './email.service';
 
 @Controller('email')
 export class EmailController {
-  constructor(private readonly emailService: EmailService) {}
+  constructor(private readonly emailService: EmailService) { }
 
   @Post('/send-email')
-  async sendEmail(@Body() dto: CreateEmailDto){
+  async sendEmail(@Body() dto: CreateEmailDto) {
     return await this.emailService.create(dto)
+  }
+  @Post()
+  create(@Body() createEmailDto: CreateEmailDto) {
+    return this.emailService.create(createEmailDto);
   }
 
 }
