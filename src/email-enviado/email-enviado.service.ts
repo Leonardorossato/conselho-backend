@@ -28,14 +28,16 @@ export class EmailEnviadoService {
                 throw new HttpException('Emails not found', HttpStatus.BAD_REQUEST)
             }
             emailsCadastrados.forEach(async element => {
-                const emailsEnviado= await this.emailEnviadoRepository.find({where: {email: element}, relations: [('conselho')]})
-                const conselhoArrayId = emailsEnviado.find((value) => value.conselho.id)    
+                const emailsEnviado= await this.emailEnviadoRepository.find({where: {email: element}, relations: {conselho: true}})
+                const allConselho = emailsEnviado.map(value => value.conselho.id)
                 await conselho.createQueryBuilder()
                 .select('*')
-                .from(Conselho, 'conselho')
-                .where(`id NOT IN (conselhoArrayId)`)
+                .from(Conselho, 'Conselho')
+                .where(`id NOT IN (${allConselho}) `)
+                .orderBy('RANDOM()')
+                .limit(1)
                 .execute();
-                return {conselhoArrayId}
+                return emailsEnviado
             });
         } catch (error) {
             throw new HttpException('Email', HttpStatus.BAD_REQUEST)
