@@ -18,8 +18,8 @@ export class EmailService {
         } catch (error) {
             throw new HttpException('Email not found', HttpStatus.NOT_FOUND)
         }
-
     }
+    
     async create(dto: CreateEmailDto) {
         try {
             const user = await this.emailRepository.findOneBy({ email: dto.email })

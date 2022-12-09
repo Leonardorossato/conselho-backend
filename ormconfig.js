@@ -10,5 +10,6 @@ module.exports.PostgresConfigSource = new DataSource ({
     entities: ['./dist/**/**/**.entity.js'],
     migrations: ['./dist/**/migrations/**.js'],
     synchronize: false,
+    logging: 'all',
     migrationsRun: true,
 })
