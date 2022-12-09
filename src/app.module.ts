@@ -22,19 +22,12 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         secure: false,
         auth: {
           user: config.get('MAIL_USER'),
-          pass: config.get('MAIL_PASSWORD'),
+          pass: config.get('MAIL_PASS'),
         },
       },
       defaults: {
         from: `"No Reply" <${config.get('MAIL_FROM')}>`,
-      },
-      template: {
-        dir: join(__dirname, 'templates'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true,
-        },
-      },
+      }
     }),
     inject: [ConfigService],
   })

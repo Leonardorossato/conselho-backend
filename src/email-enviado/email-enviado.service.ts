@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Conselho } from 'src/conselho/entities/conselho.entity';
 import { Email } from 'src/email/entities/email.entity';
 import { Repository } from 'typeorm';
-import { SendConslhoToEamilDTO } from './dto/send.email.dto';
 import { EmailEnviado } from './entities/emailEnviado.entity';
 
 @Injectable()
@@ -41,6 +40,16 @@ export class EmailEnviadoService {
                     conselhoParaEnvio.where(`id NOT IN (${allConselho}) `)
                 }
                 let result = await conselhoParaEnvio.execute();
+                let html = `<html><body><h1>Olá ${element.nome}</h1>
+                <p>Segue seu conselho do dia: ${result[0].traducao} </p>
+                </body></html>`
+                const respostaEnvio = await this.sendEmail(element.email, 'Conselho do dia', html)
+                if(respostaEnvio) await this.emailEnviadoRepository.save({
+                    data: Date(),
+                    emailId: element.id,
+                    conselhoId: result[0].id
+                })
+                console.log(respostaEnvio)
                 return result
             });
         } catch (error) {
@@ -48,26 +57,18 @@ export class EmailEnviadoService {
         }
     }
 
-    async sendEmail(dto: SendConslhoToEamilDTO){
+    async sendEmail(email: string, subject: string, body: string){
         try {
-            const userEmail = await this.emailRepository.findOneBy({email: dto.email})
-            if(!userEmail) throw new HttpException('Email already in use', HttpStatus.BAD_REQUEST)
-            const conselho = await this.conselhoRepository.find()
-
-            const sendEmail = await this.mailerService.sendMail({
-                to: userEmail.email,
-                from: '',
-                subject: dto.subject,
-                template: './confirmation',
-                html: dto.html,
-                context: {
-                    name: userEmail,
-                    conselho
-                }
+            await this.mailerService.sendMail({
+                to: email,
+                subject: subject,
+                from: 'noreply@example.com',
+                
+                html: body,
             })
-            return await this.emailEnviadoRepository.save(sendEmail)
+            return true
         } catch (error) {
-            throw new HttpException('Erro to send email', HttpStatus.BAD_REQUEST)
+            return false
         }
     }
 }

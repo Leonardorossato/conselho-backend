@@ -12,5 +12,4 @@ export class EmailEnviadoController {
     return await this.emailEnviadoService.emailsCadastrados()
   }
 
-  @Post('/send-email-conselho')
 }
