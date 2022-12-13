@@ -8,10 +8,6 @@ import { EmailService } from './email.service';
 export class EmailController {
   constructor(private readonly emailService: EmailService) { }
 
-  @Post('/send-email')
-  async sendEmail(@Body() dto: CreateEmailDto) {
-    return await this.emailService.create(dto)
-  }
   @Post('create')
   create(@Body() createEmailDto: CreateEmailDto) {
     return this.emailService.create(createEmailDto);
