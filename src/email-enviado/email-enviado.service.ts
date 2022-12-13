@@ -24,7 +24,7 @@ export class EmailEnviadoService {
     private readonly mailerService: MailerService,
   ) {}
 
-  @Cron('5 *  *  *  *  *')
+  @Cron(CronExpression.EVERY_DAY_AT_10AM)
   handleCron() {
     this.enviarEmails();
   }
@@ -59,7 +59,7 @@ export class EmailEnviadoService {
           conselhoParaEnvio.where(`id NOT IN (${allConselho}) `);
         }
         const result = await conselhoParaEnvio.execute();
-        if (!result) return;
+        if (result.length == 0) return;
         const html = `<html><body><h1>Olá ${element.nome}</h1>
                 <p>Segue seu conselho do dia: ${result[0].traducao} </p>
                 </body></html>`;
@@ -74,7 +74,6 @@ export class EmailEnviadoService {
             emailId: element.id,
             conselhoId: result[0].id,
           });
-        return result;
       });
     } catch (error) {
       throw new HttpException('Email', HttpStatus.BAD_REQUEST);
