@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    container_name: conselho-backend-nestjs
+    container_name: conselho-backend
     image: postgres
     environment:
       POSTGRES_DB: ${DB_DATABASE}
