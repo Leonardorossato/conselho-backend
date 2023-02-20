@@ -13,6 +13,6 @@ export class EmailEnviadoResolver {
 
   @Query(() => [EmailEnviadoSchema], { name: 'enviarEmail' })
   async sendEmail() {
-    return await this.emailEnviadoService.findAll();
+    return await this.emailEnviadoService.enviarEmails();
   }
 }
