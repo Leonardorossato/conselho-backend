@@ -27,38 +27,32 @@ export class ConselhoService {
   }
 
   async getConselhoApi() {
-    try {
-      const conselho = await this.conselhoRepository;
-      const quantidadeExistente = await conselho.count();
-      if (quantidadeExistente === 50)
-        throw new Error(`Quantity maximum: ${quantidadeExistente}`);
-
-      for (let index = quantidadeExistente; index < 50; index++) {
-        await axios
-          .get('https://api.adviceslip.com/advice')
-          .then(async (response) => {
-            const conselhoExistente = await conselho.findOneBy({
-              id: response.data.slip.id,
-            });
-            if (conselhoExistente) {
-              index--;
-              return 'Id already existis';
-            }
-            await conselho.save({
-              id: response.data.slip.id,
-              texto: response.data.slip.advice,
-            });
-          })
-          .catch((error) => {
-            console.log(error);
+    const conselho = await this.conselhoRepository;
+    const quantidadeExistente = await conselho.count();
+    if (quantidadeExistente === 50) {
+      throw new Error(`Quantity maximum: ${quantidadeExistente}`);
+    }
+    for (let index = quantidadeExistente; index < 50; index++) {
+      await axios
+        .get('https://api.adviceslip.com/advice')
+        .then(async (response) => {
+          const conselhoExistente = await conselho.findOneBy({
+            id: response.data.slip.id,
           });
-        setTimeout(() => {}, 3000);
-      }
-    } catch (error) {
-      throw new HttpException(
-        'Error to get a conselho with the api',
-        HttpStatus.BAD_REQUEST,
-      );
+          if (conselhoExistente) {
+            index--;
+            return 'Id already existis';
+          }
+          await this.conselhoHelper.formatCustomerResponse([conselhoExistente]);
+          await conselho.save({
+            id: response.data.slip.id,
+            texto: response.data.slip.advice,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      setTimeout(() => {}, 3000);
     }
   }
 
@@ -85,14 +79,15 @@ export class ConselhoService {
           from: 'en',
           to: 'pt',
         });
+        if (textoTraduzido) {
+          throw new HttpException('Too many request', HttpStatus.BAD_REQUEST);
+        }
         await this.conselhoRepository.save({
           id: element.id,
           traducao: textoTraduzido.text,
-          texto: element.texto,
         });
         setTimeout(() => {}, 3000);
       });
-      await this.conselhoHelper.formatCustomerResponse(texto);
       return `Quantity de textos traduzidos ${texto.length}`;
     } catch (error) {
       throw new HttpException(
