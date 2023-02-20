@@ -1,6 +1,9 @@
 import { MailerModule } from '@nestjs-modules/mailer';
+import { ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloDriver } from '@nestjs/apollo/dist/drivers';
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmAsyncConfig } from './config/ormconfig';
 import { ConselhoModule } from './conselho/conselho.module';
@@ -11,6 +14,12 @@ import { EmailModule } from './email/email.module';
   imports: [
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     ConfigModule.forRoot({ isGlobal: true }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      debug: true,
+      playground: true,
+    }),
     ConselhoModule,
     EmailModule,
     EmailEnviadoModule,
