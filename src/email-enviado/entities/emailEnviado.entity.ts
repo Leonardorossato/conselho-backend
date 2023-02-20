@@ -1,13 +1,11 @@
-import { Conselho } from '../../conselho/entities/conselho.entity';
-import { Email } from '../../email/entities/email.entity';
 import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  ManyToOne, PrimaryGeneratedColumn
 } from 'typeorm';
+import { Conselho } from '../../conselho/entities/conselho.entity';
+import { Email } from '../../email/entities/email.entity';
 
 @Entity()
 export class EmailEnviado {
