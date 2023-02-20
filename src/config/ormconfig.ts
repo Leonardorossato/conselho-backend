@@ -13,7 +13,6 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
         migrations: ['./dist/**/migrations/**.js'],
         synchronize: false,
         migrationsRun: true,
-        logging:'all'
       };
     },
 };

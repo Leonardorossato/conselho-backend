@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { EmailEnviadoService } from './email-enviado.service';
 
@@ -7,8 +7,8 @@ import { EmailEnviadoService } from './email-enviado.service';
 export class EmailEnviadoController {
   constructor(private readonly emailEnviadoService: EmailEnviadoService) {}
 
-  @Get('/all')
+  @Get('/emails-enviados')
   async getAllEmailsCadastrados(){
-    return await this.emailEnviadoService.emailsCadastrados()
+    return await this.emailEnviadoService.enviarEmails()
   }
 }
