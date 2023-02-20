@@ -8,27 +8,29 @@ import { EmailEnviadoModule } from './email-enviado/email-enviado.module';
 import { EmailModule } from './email/email.module';
 @Global()
 @Module({
-  imports: [TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+  imports: [
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     ConfigModule.forRoot({ isGlobal: true }),
-    ConselhoModule, 
-    EmailModule, 
+    ConselhoModule,
+    EmailModule,
     EmailEnviadoModule,
     MailerModule.forRootAsync({
-    useFactory: async (config: ConfigService) => ({
-      transport: {
-        host: config.get('MAIL_HOST'),
-        secure: false,
-        auth: {
-          user: config.get('MAIL_USER'),
-          pass: config.get('MAIL_PASS'),
+      useFactory: async (config: ConfigService) => ({
+        transport: {
+          host: config.get('MAIL_HOST'),
+          port: config.get('MAIL_PORT'),
+          secure: false,
+          auth: {
+            user: config.get('MAIL_USER'),
+            pass: config.get('MAIL_PASS'),
+          },
         },
-      },
-      defaults: {
-        from: `"No Reply" <${config.get('MAIL_FROM')}>`,
-      }
+        defaults: {
+          from: `"No Reply" <${config.get('MAIL_FROM')}>`,
+        },
+      }),
+      inject: [ConfigService],
     }),
-    inject: [ConfigService],
-  })
-  ]
+  ],
 })
 export class AppModule {}
