@@ -1,13 +1,11 @@
+import { MailerModule } from '@nestjs-modules/mailer';
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmAsyncConfig } from './config/ormconfig';
 import { ConselhoModule } from './conselho/conselho.module';
-import { EmailModule } from './email/email.module';
 import { EmailEnviadoModule } from './email-enviado/email-enviado.module';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { join } from 'path';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { EmailModule } from './email/email.module';
 @Global()
 @Module({
   imports: [TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
