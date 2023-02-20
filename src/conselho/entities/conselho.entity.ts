@@ -6,7 +6,7 @@ export class Conselho {
   id: number;
 
   @Column({ nullable: false, unique: true })
-  texto: string;
+  text: string;
 
   @Column()
   traducao: string;
