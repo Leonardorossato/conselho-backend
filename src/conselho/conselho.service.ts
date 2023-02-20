@@ -13,11 +13,11 @@ export class ConselhoService {
     private readonly conselhoHelper: ConselhoHelper,
   ) {}
 
-  async findAll(): Promise<Conselho[]> {
+  async findAll() {
     try {
       const conselho = await this.conselhoRepository.find();
-      await this.conselhoHelper.formatCustomerResponse(conselho);
-      return conselho;
+      const res = await this.conselhoHelper.formatCustomerResponse(conselho);
+      return res;
     } catch (error) {
       throw new HttpException(
         'Error to find all cosnelhos',
@@ -43,7 +43,6 @@ export class ConselhoService {
             index--;
             return 'Id already existis';
           }
-          await this.conselhoHelper.formatCustomerResponse([conselhoExistente]);
           await conselho.save({
             id: response.data.slip.id,
             texto: response.data.slip.advice,
@@ -88,7 +87,8 @@ export class ConselhoService {
         });
         setTimeout(() => {}, 3000);
       });
-      return `Quantity de textos traduzidos ${texto.length}`;
+      const res = await this.conselhoHelper.formatCustomerResponse(texto);
+      return `Quantity de textos traduzidos ${res.length}`;
     } catch (error) {
       throw new HttpException(
         'Error to translate all conselhos',
