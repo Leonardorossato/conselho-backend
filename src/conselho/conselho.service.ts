@@ -36,7 +36,7 @@ export class ConselhoService {
       for (let index = quantidadeExistente; index < 50; index++) {
         await axios
           .get('https://api.adviceslip.com/advice')
-          .then(async function (response) {
+          .then(async (response) => {
             const conselhoExistente = await conselho.findOneBy({
               id: response.data.slip.id,
             });
@@ -49,8 +49,8 @@ export class ConselhoService {
               texto: response.data.slip.advice,
             });
           })
-          .catch((error) =>{
-            console.error(error);
+          .catch((error) => {
+            console.log(error);
           });
         setTimeout(() => {}, 3000);
       }
@@ -88,6 +88,7 @@ export class ConselhoService {
         await this.conselhoRepository.save({
           id: element.id,
           traducao: textoTraduzido.text,
+          texto: element.texto,
         });
         setTimeout(() => {}, 3000);
       });
