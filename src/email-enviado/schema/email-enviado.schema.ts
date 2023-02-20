@@ -1,16 +1,16 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class EmailEnviadoSchema {
-  @Field(() => ID)
+  @Field(() => Int)
   id: number;
 
   @Field(() => String)
   data: string;
 
-  @Field(() => ID)
+  @Field(() => Int)
   emailId: number;
 
-  @Field(() => ID)
+  @Field(() => Int)
   conselhoId: number;
 }
