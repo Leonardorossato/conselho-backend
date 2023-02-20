@@ -1,6 +1,5 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 import { ConselhoService } from './conselho.service';
-import { CreateConselhoInput } from './dto/create-conselho.input';
 import { ConselhoSchema } from './schema/conselho.schema';
 
 @Resolver(() => ConselhoSchema)
