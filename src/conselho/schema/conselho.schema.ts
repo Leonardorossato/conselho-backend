@@ -1,8 +1,8 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class ConselhoSchema {
-  @Field(() => ID)
+  @Field(() => Int)
   id: number;
 
   @Field(() => String)
