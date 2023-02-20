@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { EmailEnviado } from '../entities/email-enviado.entity';
+import { EmailEnviado } from '../entities/emailEnviado.entity';
+
 import { EmailEnviadoSchema } from '../schema/email-enviado.schema';
 
 @Injectable()

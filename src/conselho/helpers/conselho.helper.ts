@@ -14,7 +14,7 @@ export class ConselhoHelper {
     data.forEach((element: Conselho) => {
       conselho.push({
         id: element.id,
-        text: element.text,
+        text: element.texto,
         traducao: element.traducao,
       });
     });
