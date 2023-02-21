@@ -78,9 +78,6 @@ export class ConselhoService {
           from: 'en',
           to: 'pt',
         });
-        if (textoTraduzido) {
-          throw new HttpException('Too many request', HttpStatus.BAD_REQUEST);
-        }
         await this.conselhoRepository.save({
           id: element.id,
           traducao: textoTraduzido.text,
