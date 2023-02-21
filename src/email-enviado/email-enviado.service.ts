@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Conselho } from 'src/conselho/entities/conselho.entity';
 import { Email } from 'src/email/entities/email.entity';
 import { Repository } from 'typeorm';
+import { CreateEmailEnviadoInput } from './dto/create-email-enviado.input';
 import { EmailEnviado } from './entities/emailEnviado.entity';
 import { EmailEnviadoHelper } from './helpers/email-enviado.helper';
 
@@ -21,9 +22,9 @@ export class EmailEnviadoService {
     private readonly emailEnviadoHelper: EmailEnviadoHelper,
   ) {}
 
-  @Cron(CronExpression.EVERY_DAY_AT_10AM)
-  handleCron(emailId: number, conselhoId: number) {
-    this.enviarEmails(emailId, conselhoId);
+  //@Cron(CronExpression.EVERY_DAY_AT_10AM)
+  handleCron() {
+    this.enviarEmails();
   }
 
   async findAll(): Promise<EmailEnviado[]> {
@@ -39,7 +40,7 @@ export class EmailEnviadoService {
     }
   }
 
-  async enviarEmails(emailId: number, conselhoId: number) {
+  async enviarEmails() {
     try {
       const emailsCadastrados = await this.emailRepository.find();
       const conselho = await this.conselhoRepository;
@@ -70,14 +71,11 @@ export class EmailEnviadoService {
           html,
         );
         if (respostaEnvio)
-          await this.emailEnviadoHelper.formatEmailEnviadoResponse(
-            respostaEnvio,
-          );
-        await this.emailEnviadoRepository.save({
-          data: Date(),
-          emailId: element.id,
-          conselhoId: result[0].id,
-        });
+          await this.emailEnviadoRepository.save({
+            data: Date(),
+            emailId: element.id,
+            conselhoId: result[0].id,
+          });
       });
     } catch (error) {
       throw new HttpException('Error to send a email', HttpStatus.BAD_REQUEST);
