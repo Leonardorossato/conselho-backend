@@ -1,4 +1,4 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { EmailEnviadoService } from './email-enviado.service';
 import { EmailEnviadoSchema } from './schema/email-enviado.schema';
 
@@ -11,8 +11,11 @@ export class EmailEnviadoResolver {
     return this.emailEnviadoService.findAll();
   }
 
-  @Query(() => [EmailEnviadoSchema], { name: 'enviarEmail' })
-  async sendEmail() {
-    return await this.emailEnviadoService.enviarEmails();
+  @Query()
+  async sendEmail(
+    @Args({ name: 'conselhoId', type: () => Number }) conselhoId: number,
+    @Args({ name: 'emailId', type: () => Number }) emailId: number,
+  ) {
+    return await this.emailEnviadoService.enviarEmails(conselhoId, emailId);
   }
 }
