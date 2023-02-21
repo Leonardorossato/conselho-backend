@@ -22,8 +22,8 @@ export class EmailEnviadoService {
   ) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_10AM)
-  handleCron() {
-    this.enviarEmails();
+  handleCron(emailId: number, conselhoId: number) {
+    this.enviarEmails(emailId, conselhoId);
   }
 
   async findAll(): Promise<EmailEnviado[]> {
@@ -39,7 +39,7 @@ export class EmailEnviadoService {
     }
   }
 
-  async enviarEmails() {
+  async enviarEmails(emailId: number, conselhoId: number) {
     try {
       const emailsCadastrados = await this.emailRepository.find();
       const conselho = await this.conselhoRepository;
